@@ -18,28 +18,31 @@ function App() {
   }, [])
 
     const handleScanSuccess = async (scannedCode) => {
-      console.log(scannedCode);
-      
-      let response = await axios.post("https://qr-code-app-backend.onrender.com/qr/scan-qr", {scannedCode}, {headers: {"email" : user?.email}}, {withCredentials: true});
-
-      let data = await response?.data
-
-      console.log(data);
-
-      if(data.result) {
-        return Swal.fire({
-                title: "Good job !",
-                text: "Qr Successfuly Scanned",
-                icon: "success"
-              })
-        }else{
-        Swal.fire({
-          title: "Qr Already Scanned",
-          text: "Something went wrong!",
-          icon: "error",
-        })
+      try {
+        let response = await axios.post("https://qr-code-app-backend.onrender.com/qr/scan-qr", {scannedCode}, {headers: {"email" : user?.email}}, {withCredentials: true});
+  
+        let data = await response?.data
+  
+        console.log(data);
+  
+        if(data.result) {
+          return Swal.fire({
+                  title: "Good job !",
+                  text: "Qr Successfuly Scanned",
+                  icon: "success"
+                })
+          }else{
+          Swal.fire({
+            title: "Qr Already Scanned",
+            text: "Something went wrong!",
+            icon: "error",
+          })
+        }
+      } catch (error) {
+        console.log(error);
+        
       }
-    }
+      }
   
     const handleScanError = (error) => {
       console.error("Error scanning QR Code:", error)
