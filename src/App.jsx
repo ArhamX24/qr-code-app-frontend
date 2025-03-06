@@ -39,8 +39,11 @@ function App() {
           })
         }
       } catch (error) {
-        console.log(error);
-        
+        Swal.fire({
+          title: `${error.message}`,
+          text: "Something went wrong!",
+          icon: "error",
+        })
       }
       }
   
