@@ -20,7 +20,7 @@ function App() {
     const handleScanSuccess = async (scannedCode) => {
       console.log(scannedCode);
       
-      let response = await axios.post("http://localhost:8000/qr/scan-qr", {scannedCode}, {headers: {"email" : user?.email}}, {withCredentials: true});
+      let response = await axios.post("https://qr-code-app-backend.onrender.com/qr/scan-qr", {scannedCode}, {headers: {"email" : user?.email}}, {withCredentials: true});
       console.log(response?.data);
 
       if (response.data.result) {

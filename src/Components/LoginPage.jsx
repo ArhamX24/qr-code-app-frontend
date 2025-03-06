@@ -16,7 +16,7 @@ const LoginPage = () => {
         onSubmit: async (values,action) => {
             let {email, password} = values
             try {
-                let response = await axios.post("http://localhost:8000/user/login",{email, password}, {withCredentials: true})
+                let response = await axios.post("https://qr-code-app-backend.onrender.com/user/login",{email, password}, {withCredentials: true})
 
                 if(response.data.result == true){
                   localStorage.setItem("UserData", JSON.stringify(response.data.data));
