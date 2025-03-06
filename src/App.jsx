@@ -21,6 +21,7 @@ function App() {
       console.log(scannedCode);
       
       let response = await axios.post("https://qr-code-app-backend.onrender.com/qr/scan-qr", {scannedCode}, {headers: {"email" : user?.email}}, {withCredentials: true});
+      
       console.log(response?.data);
 
       if (response.data.result) {
@@ -29,11 +30,11 @@ function App() {
           text: "Qr Successfuly Scanned",
           icon: "success"
         });
-      } else {
+        }else {
         Swal.fire({
-          icon: "error",
           title: "Qr Already Scanned",
           text: "Something went wrong!",
+          icon: "error",
         })
       }
     }
