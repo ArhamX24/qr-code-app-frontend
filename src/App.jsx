@@ -17,35 +17,56 @@ function App() {
     }
   }, [])
 
-    const handleScanSuccess = async (scannedCode) => {
-      try {
-        let response = await axios.post("https://qr-code-app-backend.onrender.com/qr/scan-qr", {scannedCode}, {headers: {"email" : user?.email}}, {withCredentials: true});
-  
-        let data = await response?.data
-  
-        console.log(data);
-  
-        if(data.result) {
-          return Swal.fire({
-                  title: "Good job !",
-                  text: "Qr Successfuly Scanned",
-                  icon: "success"
-                })
-          }else{
-          Swal.fire({
-            title: "Qr Already Scanned",
-            text: "Something went wrong!",
-            icon: "error",
-          })
+  const handleScanSuccess = async (scannedCode) => {
+    try {
+      // Make the API request
+      const response = await axios.post(
+        "https://qr-code-app-backend.onrender.com/qr/scan-qr",
+        { scannedCode },
+        {
+          headers: { email: user?.email },
+          withCredentials: true,
         }
-      } catch (error) {
+      );
+  
+      // Get the response data
+      const data = response?.data;
+  
+      // SweetAlert for both success and false cases
+      if (data.result) {
         Swal.fire({
-          title: `${error.message}`,
-          text: "Something went wrong!",
+          title: "Good job!",
+          text: "QR Successfully Scanned",
+          icon: "success",
+        });
+      } else {
+        Swal.fire({
+          title: "QR Already Scanned",
+          text: "This QR code has already been scanned.",
+          icon: "warning", // Use a warning icon for already-scanned QR codes
+        });
+      }
+    } catch (error) {
+      // Handle HTTP errors (e.g., 400 Bad Request)
+      if (error.response) {
+        Swal.fire({
+          title: "Error!",
+          text: error.response.data.message || "Something went wrong while scanning.", // Show the server's error message (if available)
           icon: "error",
-        })
+        });
+      } else {
+        // Handle network or unexpected errors
+        Swal.fire({
+          title: "Network Error!",
+          text: "Unable to connect to the server. Please try again later.",
+          icon: "error",
+        });
       }
-      }
+  
+      console.error("Error during QR scanning:", error); // Log the error for debugging
+    }
+  };
+  
   
     const handleScanError = (error) => {
       console.error("Error scanning QR Code:", error)
