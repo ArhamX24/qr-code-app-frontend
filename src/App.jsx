@@ -30,7 +30,11 @@ function App() {
           icon: "success"
         });
       } else {
-        console.log("Error", data);
+        Swal.fire({
+          icon: "error",
+          title: "Qr Already Scanned",
+          text: "Something went wrong!",
+        })
       }
     }
   
