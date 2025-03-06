@@ -2,7 +2,7 @@ import { useState , useEffect} from 'react'
 import './App.css'
 import LoginPage from './Components/LoginPage'
 import QRCodeScanner from './Components/QRCodeScanner';
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from "sweetalert2"
 
@@ -22,14 +22,16 @@ function App() {
       
       let response = await axios.post("https://qr-code-app-backend.onrender.com/qr/scan-qr", {scannedCode}, {headers: {"email" : user?.email}}, {withCredentials: true});
 
-      console.log(response?.data);
+      let data = await response?.data
 
-      if (response.data.result) {
-        Swal.fire({
-          title: "Good job !",
-          text: "Qr Successfuly Scanned",
-          icon: "success"
-        });
+      console.log(data);
+
+      if(data.result) {
+        return Swal.fire({
+                title: "Good job !",
+                text: "Qr Successfuly Scanned",
+                icon: "success"
+              })
         }else{
         Swal.fire({
           title: "Qr Already Scanned",
