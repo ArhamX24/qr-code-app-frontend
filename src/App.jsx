@@ -9,6 +9,7 @@ import Swal from "sweetalert2"
 function App() {
 
   const [user, setUser] = useState(null)
+  const [isScanning, setIsScanning] = useState(false)
 
   useEffect(() => {
     let userinLS = JSON.parse(localStorage.getItem("UserData"));
@@ -18,6 +19,13 @@ function App() {
   }, [])
 
   const handleScanSuccess = async (scannedCode) => {
+    if (isScanning) {
+      return;
+    }
+
+    setIsScanning(true);
+
+
     try {
       const response = await axios.post(
         "https://qr-code-app-backend.onrender.com/qr/scan-qr",
@@ -31,32 +39,27 @@ function App() {
       const data = response?.data;
   
       if (data.result) {
-        return (Swal.fire({
-          title: "Good job!",
-          text: "QR Successfully Scanned",
-          icon: "success",
-        }))
+        return Swal.fire({title: "Good job!",text: "QR Successfully Scanned",icon: "success"})
       } else {
-        return (Swal.fire({
-          title: "QR Already Scanned",
-          text: "This QR code has already been scanned.",
-          icon: "warning", 
-        }));
+        return Swal.fire({title: "QR Already Scanned",text: "This QR code has already been scanned.",icon: "warning"});
       }
-    } catch (error) {
+    }catch (error) {
+      console.log(error);
       if (error.response) {
-       return (Swal.fire({
+       return Swal.fire({
           title: "Error!",
           text: error.response.data.message || "Something went wrong while scanning.", 
           icon: "error",
-        }));
+        });
       } else {
-        return (Swal.fire({
+        Swal.fire({
           title: "Network Error!",
           text: "Unable to connect to the server. Please try again later.",
           icon: "error",
-        }));
+        })
       }
+      }finally{
+        setIsScanning(false);
   
       console.error("Error during QR scanning:", error); 
     }
