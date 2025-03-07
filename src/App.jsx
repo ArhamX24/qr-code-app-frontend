@@ -19,7 +19,6 @@ function App() {
 
   const handleScanSuccess = async (scannedCode) => {
     try {
-      // Make the API request
       const response = await axios.post(
         "https://qr-code-app-backend.onrender.com/qr/scan-qr",
         { scannedCode },
@@ -29,41 +28,37 @@ function App() {
         }
       );
   
-      // Get the response data
       const data = response?.data;
   
-      // SweetAlert for both success and false cases
       if (data.result) {
-        Swal.fire({
+        return (Swal.fire({
           title: "Good job!",
           text: "QR Successfully Scanned",
           icon: "success",
-        });
+        }))
       } else {
-        Swal.fire({
+        return (Swal.fire({
           title: "QR Already Scanned",
           text: "This QR code has already been scanned.",
-          icon: "warning", // Use a warning icon for already-scanned QR codes
-        });
+          icon: "warning", 
+        }));
       }
     } catch (error) {
-      // Handle HTTP errors (e.g., 400 Bad Request)
       if (error.response) {
-        Swal.fire({
+       return (Swal.fire({
           title: "Error!",
-          text: error.response.data.message || "Something went wrong while scanning.", // Show the server's error message (if available)
+          text: error.response.data.message || "Something went wrong while scanning.", 
           icon: "error",
-        });
+        }));
       } else {
-        // Handle network or unexpected errors
-        Swal.fire({
+        return (Swal.fire({
           title: "Network Error!",
           text: "Unable to connect to the server. Please try again later.",
           icon: "error",
-        });
+        }));
       }
   
-      console.error("Error during QR scanning:", error); // Log the error for debugging
+      console.error("Error during QR scanning:", error); 
     }
   };
   
